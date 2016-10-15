@@ -1,0 +1,161 @@
+/*using namespace std;
+
+void Restaurant::getInput()
+{
+    string command;
+    Table* table_input;
+    Party* party_input;
+    while(cin >> command)
+    {
+        if (command == "table")
+        {
+            string tableID;
+            int num_seats;
+            string server_name;
+            cin >> tableID;
+            cin >> num_seats;
+            cin >> server_name;
+            table_input = new Table (tableID, num_seats, server_name);
+            available.append(table_input);
+        }
+        
+        else if (command == "party")
+        {
+            string reservation_name;
+            int number_diners;
+            int time_required;
+            cin >> number_diners;
+            cin >> reservation_name;
+            cin >> time_required;
+            party_input = new Party(number_diners, reservation_name, time_required);
+            waiting.append(party_input);
+        }
+        else
+        {
+            break;
+        }
+    }
+}
+void Restaurant::serveParties()
+{
+    cout << "*******************ok we are in serve parties fucking function**********************************" << endl;
+    Table* serve_table;
+    Table* occupied_table;
+    Party* party;
+    string server_name;
+    int num_diners;
+    int count_this_loop = 0; //***remove this now
+    party = waiting.first();
+    serve_table = available.first();
+    
+    while (!waiting.empty() || !occupied.empty())
+    {
+        if (occupied.empty())
+        {
+            cout << "occupied list is empty" << endl;
+        }
+        else 
+        {
+            cout << "occupied lis is not empty" << endl;
+        }
+        for(occupied_table = occupied.first(); occupied_table != nullptr; occupied_table = occupied.next())
+        {
+            occupied_table->decrementTimer();
+            int timer;
+            timer = occupied_table->getTimer();
+            if(timer == 0)
+            {
+                cout << party->getReservationName() << " finished" << endl;
+                occupied_table = occupied.remove();
+                occupied_table->clearTable();
+                available.append(occupied_table);
+            }
+        }
+        while (!waiting.empty() && party != nullptr && serve_table!= nullptr)
+        {
+           //for(serve_table = available.first(); serve_table != nullptr; serve_table = available.next())
+            while(!available.empty())
+            {
+                    if( party->getNumDiners() <= serve_table->getNumSeats()) ////sadfdsaf
+                    {
+                        count_this_loop++; // ****remove this
+                        cout << *party->getReservationName() << " seated at " << *serve_table->getTableID()<< endl;
+                        serve_table->seatParty(party);
+                        serve_table->setTimer(party->getTimeRequired());
+                        num_diners = party->getNumDiners();
+                        server_name = *serve_table->getServerName();
+                        servers.insert(pair<string, int>(server_name, num_diners));
+                        occupied.append(serve_table);
+                        //***removal of party
+                        cout << "*********removal of party******" << endl;
+                        cout << "party before remove is <" << party <<  ">" <<endl;
+                        party = waiting.remove();
+                        cout << "party after remove is " << party <<  ">" <<endl;
+                        //***removal of table
+                        cout << "*****removal of table*****" << endl;
+                        cout << "table before remove is" << serve_table <<  ">" <<endl;
+                        serve_table = available.remove();
+                        cout << "table after remove is <" << serve_table << ">" << endl;
+                        //is table lis empty?
+                        if (serve_table == nullptr)
+                        {
+                            serve_table = available.first();
+                        }
+                        cout << "**************list empty?**********" << endl;
+                        if(available.empty())
+                        {
+                                cout << "table list is empty" << endl;
+                        }
+                        else 
+                        {
+                            cout << "table list is not empty" << endl;
+                        }
+                        //***if table is null but table list not empty go to first table
+                        if (waiting.empty())
+                        {
+                            cout << "waiting list is empty" << endl;
+                        }
+                        else
+                        {
+                            cout << "waiting list is not empty" << endl;
+                        }
+                        break;
+                    }
+                    else
+                    {
+                        available.append(serve_table);
+                        serve_table = available.next();
+                    }
+                    cout << "the while loop executed for waiting parties" << endl;
+                    break;
+                if(available.empty())
+                {
+                    break;
+                }
+            }
+        }
+            //break;
+        if(waiting.empty()) //&& occupied.empty())
+        {
+            map<string, int>::iterator iter;
+            for (iter = servers.begin(); iter != servers.end(); iter++)
+            {
+                cout << (*iter).first << " served ";
+                cout << (*iter).second << endl;
+            }
+            break;
+        }
+        else
+        {
+            continue;
+        }
+        cout << "I went inside the big while loop only < " << count_this_loop << " > times " << endl;
+    }
+}
+int main()
+{
+    Restaurant myDiner; 
+    myDiner.getInput(); 
+    myDiner.serveParties();
+    return 0;
+}*/

@@ -1,0 +1,5 @@
+a->c with length 3
+a->e with length 4
+h->f->b->a with length 13
+h->f->b->d with length 11
+g->f->b->a->e with length 13

@@ -1,0 +1,93 @@
+*******************ok we are in serve parties fucking function**********************************
+occupied list is empty
+party before table loop is 0x2028040
+table before the loop is 0x2027c20
+**************************
+Larry seated at table-01
+Getting timer equals : 60
+*********removal of party******
+party before remove is 0x2028040>
+party after remove is 0x20280b0>
+**************list empty?**********
+table list is not empty
+waiting list is not empty
+Jan seated at table-01
+Getting timer equals : 90
+*********removal of party******
+party before remove is 0x20280b0>
+party after remove is 0x2028120>
+**************list empty?**********
+table list is not empty
+waiting list is not empty
+Mike seated at table-01
+Getting timer equals : 75
+*********removal of party******
+party before remove is 0x2028120>
+party after remove is 0x2028190>
+**************list empty?**********
+table list is not empty
+waiting list is not empty
+Cindy seated at table-01
+Getting timer equals : 90
+*********removal of party******
+party before remove is 0x2028190>
+party after remove is 0x2028200>
+**************list empty?**********
+table list is not empty
+waiting list is not empty
+Lenny seated at table-01
+Getting timer equals : 60
+*********removal of party******
+party before remove is 0x2028200>
+party after remove is 0x2028270>
+**************list empty?**********
+table list is not empty
+waiting list is not empty
+Cal seated at table-01
+Getting timer equals : 90
+*********removal of party******
+party before remove is 0x2028270>
+party after remove is 0x20282e0>
+**************list empty?**********
+table list is not empty
+waiting list is not empty
+Tom seated at table-01
+Getting timer equals : 60
+*********removal of party******
+party before remove is 0x20282e0>
+party after remove is 0x2028350>
+**************list empty?**********
+table list is not empty
+waiting list is not empty
+Shirley seated at table-01
+Getting timer equals : 90
+*********removal of party******
+party before remove is 0x2028350>
+party after remove is 0x20283c0>
+**************list empty?**********
+table list is not empty
+waiting list is not empty
+Clarence seated at table-01
+Getting timer equals : 60
+*********removal of party******
+party before remove is 0x20283c0>
+party after remove is 0x2028430>
+**************list empty?**********
+table list is not empty
+waiting list is not empty
+Fred seated at table-01
+Getting timer equals : 60
+*********removal of party******
+party before remove is 0x2028430>
+party after remove is 0x20284a0>
+**************list empty?**********
+table list is not empty
+waiting list is not empty
+Betty seated at table-01
+Getting timer equals : 75
+*********removal of party******
+party before remove is 0x20284a0>
+party after remove is 0>
+**************list empty?**********
+table list is not empty
+waiting list is empty

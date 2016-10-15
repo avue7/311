@@ -1,0 +1,17 @@
+*******************ok we are in serve parties fucking function**********************************
+occupied list is empty
+party before table loop is 0x619040
+Larry seated at table-01
+Getting timer equals : 60
+party before remove is 0x619040
+table is not empty
+party after remove is 0x6190b0
+waiting list is not empty
+the while loop executed
+party before table loop is 0x6190b0
+  not equal going to next table  
+  not equal going to next table  
+  not equal going to next table  
+Jan seated at booth-01
+Getting timer equals : 90
+party before remove is 0x6190b0
