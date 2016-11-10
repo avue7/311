@@ -6,36 +6,26 @@
  *            Implements the functions of the red-black tree.
  *
  * @author Athit Vue
- * @date 04/16/2016
+ * @date 10/31/2016
  */
-
 #include <iostream>
 #include <iomanip>
-#include <string>
 #include <vector>
 #include "rbtree.h"
-
-using namespace std;
 
 using std::cout;
 using std::setw;
 using std::endl;
 
-/**
- * RBTree constructor.
- */
 RBTree::RBTree()
 {
   nil = new Node();
   root = nil;
 }
 
-/**
- * RBTree destructor.
- */
 RBTree::~RBTree()
 {
-  //Delete the tree.
+  //Delete the tree right before program exits.
   while (root != nil)
   {
     rbDelete(root);
@@ -43,30 +33,29 @@ RBTree::~RBTree()
   delete nil;
 }
 
-/*++++++++++++++++++++++++++
----Class Node Member Functions Below---
-++++++++++++++++++++++++++*/
-
+/*********************************
+ * NODE MEMBER FUNCTIONS *
+*********************************/
 /**
- * Node class constructor
+ * Node constructor
+ * 
+ * Create that node Nil for the red-black tree.
  */
 RBTree::Node::Node()
 {
-  //Setting everything to NULL and default color to Black.
   parent = NULL;
   left = NULL;
   right = NULL;
+  key = NULL;
+  value = NULL;
   color = 'B';
 }
 
-/**
- * Destructor for Node class
- */
+/* Node destructor */
 RBTree::Node::~Node()
 {
- //Delete the key and value!
   delete key;
-  delete value;
+  delete value;;
 }
 
 /**
@@ -77,25 +66,23 @@ RBTree::Node::~Node()
  * the parent of the inserted Node and nil to the children
  * of the inserted Node. The new inserted Node is always 
  * red.
- * @param insertedKey    The key identifier that was inserted.
- * @param insertedValue The inserted value that belongs to 
- *                                        the key identifier.
- * @param node                Pointer variable to Node nil.
+ * @param key The key identifier that was inserted.
+ * @param value The inserted value that belongs to the key identifier.
  */
-RBTree::Node::Node(const string& k, const string& v, Node *node) 
+RBTree::Node::Node(const string& key, const string& value)
 {
-  key = new string(k);
-  value = new string(v);
-  left = node;
-  right = node;
+  this->key = new string(key);
+  this->value = new string(value);
+  Node* nodeNil = NULL;
+  left = nodeNil;
+  right = nodeNil;
   color = 'R';
-  parent = node;
+  parent = nodeNil;
 }
-
-/*+++++++++++++++++++++++++++
----RBTree Class Member Functions Below---
-+++++++++++++++++++++++++++*/
-
+  
+/***********************************
+ * PUBLIC MEMBER FUNCTIONS *
+***********************************/
 /**
  * RBTree::rbInsert
  *
@@ -104,12 +91,12 @@ RBTree::Node::Node(const string& k, const string& v, Node *node)
  * tree. It calls the overloaded private mutator 
  * rbInsert.
  *
- * @param key     The key identifyer of the Node.
- * @param value  The value that belongs to the key.
+ * @param key The key identifyer of the Node.
+ * @param value The value that belongs to the key.
  */
 void RBTree::rbInsert(const string& key, const string& value)
 {
-  rbInsert(new Node(key, value, nil)); 
+  rbInsert(new Node(key, value));
 }
 
 /**
@@ -199,50 +186,54 @@ void RBTree::rbDelete(const string& key, const string& value)
  * deleting. 
  *
  * @param key The key identifier to a node.
- * @return value_vector Return the node from the values
- *                                       vector that had the same values.
+ *
+ * @return valuesVector Return the node from the values vector that
+ * had the same values.
  */
 vector<const string*> RBTree::rbFind(const string& key)
 {
-  vector<const string*> value_vector;
-  //Temp is a temp node for current node we are working on.
-  Node *temp = nil;
-  //Begin search from root
-  temp = rbTreeSearch(root, key);
-  if ((temp != nil) && *(temp->key) == key) 
+  Node *temp_node = root;
+  Node *s_result_node; 
+  Node *temp_node2;
+  vector<const string*> valuesVector;
+  vector<Node *> tempVector;
+  s_result_node = rbTreeSearch(temp_node, key);
+  temp_node = s_result_node;
+  temp_node2 = s_result_node;
+
+  if (s_result_node != nil)
   {
-    //If key is found push from back to vector.
-    value_vector.push_back(temp->value);
-    //Need to find duplicates. 
-    Node* successor_node;
-    Node* find_sNode = temp;
-    successor_node = rbTreeSuccessor(find_sNode);
-    //If duplicate is found, push it in the back of vector and 
-    //search for more by finding the newly founds successor.
-    //Keep looking until we hit a nil.
-    while (successor_node != nil && 
-      *(successor_node->key) == key) 
+    valuesVector.push_back(s_result_node->value);
+    //Check predecessor side for duplicates.
+    while ((s_result_node = rbTreePredecessor(temp_node)) != nil)
     {
-      value_vector.push_back (successor_node->value);
-      find_sNode = successor_node;
-      successor_node = rbTreeSuccessor(find_sNode);
+      if (*(s_result_node->key) == key)
+      {
+        valuesVector.push_back(s_result_node->value);
+        temp_node = s_result_node;
+      }
+      else
+      {
+        break;
+      }
     }
-    //Now we need to look for predecessor node as well.
-    //Same as above, keep looking for duplicates til nil.
-    Node* predecessor_node;
-    Node* find_pNode = temp;
-    predecessor_node = rbTreePredecessor(find_pNode);
-    while (predecessor_node != nil && 
-      *(predecessor_node->key) == key) 
+    //Check sucessor side for duplicates.
+    while ((s_result_node = rbTreeSuccessor(temp_node2)) != nil)
     {
-      value_vector.push_back(predecessor_node->value);
-      find_pNode = predecessor_node;
-      predecessor_node = rbTreePredecessor(find_pNode);
+      if (*(s_result_node->key) == key)
+      {
+        valuesVector.push_back(s_result_node->value);
+        temp_node2 = s_result_node;
+      }
+      else
+      {  
+        break;
+      }
     }
   }
-  return value_vector;
+return valuesVector;
 }
-  
+
 /**
  * RBTree::rbPrintTree
  * 
@@ -255,9 +246,11 @@ void RBTree::rbPrintTree()
   reverseInOrderPrint(root, 0);
 }
 
-/*++++++++++++++++++++
----Private Accessors Are Below---
-++++++++++++++++++++*/
+/**************************************
+ * PRIVATE MEMBER FUNCTIONS *
+**************************************/
+
+/* PRIVATE ACCESSORS */
 
 /**
  * RBTree::Node* RBTree::rbTreeMinimum
@@ -265,14 +258,15 @@ void RBTree::rbPrintTree()
  * This is a private accessor function to find a tree's minimum.
  * 
  * @param x The node in which we are concern with; the 
- *                  starting node to find the tree minimum. 
+ * starting node to find the tree minimum. 
+ *
  * @return x The tree's minimum node which we want. 
  */
 RBTree::Node* RBTree::rbTreeMinimum(Node* x)
 {
-  while (x->left != nil) //Go left until we find a nil.
+  while (x->left != nil)
   {
-    x = x->left; //Set x to equal the Node right before we hit a nil.
+    x = x->left;
   }
   return x;
 }
@@ -283,14 +277,15 @@ RBTree::Node* RBTree::rbTreeMinimum(Node* x)
  * This is a private accessor function to find a tree's maximum.
  * 
  * @param x The node in which we are concern with; the 
- *                  starting node to find the tree maximum. 
+ * starting node to find the tree maximum. 
+ *
  * @return x The tree's maximum node which we want. 
  */
 RBTree::Node* RBTree::rbTreeMaximum(Node* x)
 {
-  while (x->right != nil) //Go right until we find a nil.
+  while (x->right != nil) 
   {
-    x = x->right; //Set x to the node right before we hit nil.
+    x = x->right;
   }
   return x;
 }
@@ -302,9 +297,10 @@ RBTree::Node* RBTree::rbTreeMaximum(Node* x)
  * of a tree.
  * 
  * @param x The node in which we are concerned with.
- * @return r  rbTreeMinimum(x->right) The successor of the
- *                   Node in which we are concerned with if x->right
- *                    != nil.
+ *
+ * @return rbTreeMinimum(x->right): The successor of the Node 
+ * in which we are concerned with if x->right != nil.
+ *
  * @return y  The successor.
  */
 RBTree::Node* RBTree::rbTreeSuccessor(Node* x)
@@ -314,13 +310,14 @@ RBTree::Node* RBTree::rbTreeSuccessor(Node* x)
     return rbTreeMinimum(x->right);
   }
   Node* y = x->parent;
-  while (y != nil &&  x == y->right)
+  while (y != nil && x == y->right)
   {
     x = y;
-    x = y->parent;
+    y = y->parent;
   }
   return y;
 }
+
 
 /**
  * RBTree::Node* RBTree::rbTreePredecessor
@@ -329,9 +326,10 @@ RBTree::Node* RBTree::rbTreeSuccessor(Node* x)
  * predecessor of a tree.
  * 
  * @param x The node in which we are concerned with.
- * @return r  TreeMinimum(x->left) The predecessor of the
- *                   Node in which we are concerned with if 
- *                    x->left != nil.
+ *
+ * @return rbTreeMinimum(x->left) The predecessor of the Node
+ * in which we are concerned with if x->left != nil.
+ * 
  * @return y  The predecessor.
  */
 RBTree::Node* RBTree::rbTreePredecessor(Node* x)
@@ -341,10 +339,10 @@ RBTree::Node* RBTree::rbTreePredecessor(Node* x)
     return rbTreeMaximum(x->left);
   }
   Node* y = x->parent;
-  while (y != nil &&  x == y->left)
+  while (y != nil && x == y->left)
   {
     x = y;
-    x = y->parent;
+    y = y->parent;
   }
   return y;
 }
@@ -356,31 +354,36 @@ RBTree::Node* RBTree::rbTreePredecessor(Node* x)
  * find the Node that matches the one we want to look for.
  * 
  * @param  x A pointer variable to the Node that we are 
- *                   currently looking at.
+ * currently looking at.
  * @param k The key identifier that we are searching for. 
+ *
  * @return x  The node that matches the key identifier or 
- *                   node that we are looking for. 
+ *  node that we are looking for. 
  * @return rbTreeSearch(x->left, k) Recursively call the 
- *                function until we find the node that we are 
- *                looking for on the left, if our key is less than
- *                the Node that we are currently looking at.
- * @return rbTreeSearch(x->right, k) Recursively call the 
- *                function until we find the node that we are 
- *                looking for on the right path of the tree, if our
- *                key is greater than the Node that we are 
- *                currently looking at. 
+ * function until we find the node that we are 
+ * looking for on the left, if our key is less than
+ * the Node that we are currently looking at.
+ *@return rbTreeSearch(x->right, k) Recursively call the 
+ * function until we find the node that we are 
+ * looking for on the right path of the tree, if our
+ * key is greater than the Node that we are 
+ * currently looking at. 
  */
 RBTree::Node* RBTree::rbTreeSearch(Node* x, const string& k)
 {
-  if ((x == nil) || (k == *(x->key))) 
+  if (x == nil)
   {
     return x;
   }
-  if (k < *(x->key)) 
+  else if (k == *x->key) 
   {
+    return x; 
+  }
+  else if (k < *x->key)
+  {  
     return rbTreeSearch(x->left, k);
-  } 
-  else 
+  }
+  else
   {
     return rbTreeSearch(x->right, k);
   }
@@ -392,21 +395,21 @@ RBTree::Node* RBTree::rbTreeSearch(Node* x, const string& k)
  * This function is a private accessor function that walks
  * the tree from root and prints it in reverse order.
  *
- * @param x        The parent Node.
+ * @param x The parent Node.
  * @param depth The depth of the tree. 
  */
-void RBTree::reverseInOrderPrint(Node *x, int depth) {
-   if ( x != nil ) {
-      reverseInOrderPrint(x->right, depth+1);
-      cout << setw(depth*4+4) << x->color << " ";
-      cout << *(x->key) << " " << *(x->value) << endl;
-      reverseInOrderPrint(x->left, depth+1);
+void RBTree::reverseInOrderPrint(Node *x, int depth) 
+{
+   if ( x != nil ) 
+   {
+    reverseInOrderPrint(x->right, depth+1);
+    cout << setw(depth*4+4) << x->color << " ";
+    cout << *(x->key) << " " << *(x->value) << endl;
+    reverseInOrderPrint(x->left, depth+1);
    }
 }
 
-/*++++++++++++++++++++
----Private Mutators Are Below---
-++++++++++++++++++++*/
+/* PRIVATE MUTATORS */
 
 /**
  * RBTree::leftRotate
@@ -431,16 +434,16 @@ void RBTree::leftRotate(Node* x)
   {
     root = y;
   }
-  else if (x == x->parent->left)
-  {
+  else if ( x == x->parent->left)
+  {  
     x->parent->left = y;
   }
   else
-  {
+  {  
     x->parent->right = y;
   }
-  y->left = x;
-  x->parent = y;
+  y->left = x; 
+  x->parent = y; 
 }
 
 /**
@@ -453,23 +456,25 @@ void RBTree::leftRotate(Node* x)
  */
 void RBTree::rightRotate(Node* x)
 {
-  Node* y = x->left; 
-  x->left = y->right; 
+  Node* y = x->left;
+  x->left = y->right;
   if (y->right != nil)
   {
     y->right->parent = x;
   }
-  y->parent = x->parent; 
-  if (x->parent == nil) 
+    
+  y->parent = x->parent;
+  
+  if (x->parent == nil)
   {
     root = y;
   }
   else if (x == x->parent->right)
-  {
+  {   
     x->parent->right = y;
   }
-  else                         
-  {
+  else
+  {  
     x->parent->left = y;
   }
   y->right = x;
@@ -486,12 +491,12 @@ void RBTree::rightRotate(Node* x)
  */
 void RBTree::rbInsertFixup(Node* z)
 {
-  Node* y;
   while (z->parent->color == 'R')
   {
     if (z->parent == z->parent->parent->left)
     {
-      y = z->parent->parent->right;
+      Node* y=z->parent->parent->right;
+      /* Case 1 */
       if (y->color == 'R')
       {
         z->parent->color = 'B';
@@ -499,13 +504,15 @@ void RBTree::rbInsertFixup(Node* z)
         z->parent->parent->color = 'R';
         z = z->parent->parent;
       }
+      /* Case 2 */
+      else if (z == z->parent->right)
+      { 
+        z = z->parent;
+        leftRotate(z);
+      }
+      /* Case 3 */
       else
       {
-        if (z == z->parent->right)
-        { 
-          z = z->parent;
-          leftRotate(z);
-        }
         z->parent->color = 'B';
         z->parent->parent->color = 'R';
         rightRotate(z->parent->parent);
@@ -513,7 +520,7 @@ void RBTree::rbInsertFixup(Node* z)
     }
     else
     {
-      y = z->parent->parent->left;
+      Node* y=z->parent->parent->left;
       if (y->color == 'R')
       {
         z->parent->color = 'B';
@@ -521,21 +528,23 @@ void RBTree::rbInsertFixup(Node* z)
         z->parent->parent->color = 'R';
         z = z->parent->parent;
       }
+      else if (z == z->parent->left)
+      {
+        z = z->parent;
+        rightRotate(z);
+      }
       else
       {
-        if (z == z->parent->left)
-        {
-          z = z->parent;
-          rightRotate(z);
-        }
         z->parent->color = 'B';
         z->parent->parent->color = 'R';
         leftRotate(z->parent->parent);
       }
     }
   }
+  /* Don't forget to make the root black */
   root->color = 'B';
 }
+
 /**
  * RBTree::rbDeleteFixup
  *
@@ -622,7 +631,7 @@ void RBTree::rbDeleteFixup(Node* x)
  * This private mutator function transplants two nodes. 
  * 
  * @param u The node removed from the tree or moved within
- *                  the tree.
+ * the tree.
  * @param v The node that moves into u's original position. 
  */
 void RBTree::rbTransplant(Node* u, Node* v)
@@ -632,19 +641,18 @@ void RBTree::rbTransplant(Node* u, Node* v)
     root = v;
   }
   else if ( u ==u->parent->left)
-  {
+  {  
     u->parent->left = v;
   }
   else
-  {
+  {  
     u->parent->right = v;
   }
   v->parent = u->parent;
 }
-
-/*++++++++++++++++++++++++++++++++++++
----Private Mutators Overloaded From Public Interface Below---
-++++++++++++++++++++++++++++++++++++*/
+/******************************************************************
+ * PRIVATE MUTATORS OVERLOADED FROM PUBLIC INTERFACE *
+******************************************************************/
 
 /**
  * RBTree::rbInsert
@@ -656,7 +664,7 @@ void RBTree::rbTransplant(Node* u, Node* v)
  * search tree remains true. 
  *
  * @param z The node in which needs to be inserted onto the 
- *                  red-black tree.
+ * red-black tree.
  */
 void RBTree::rbInsert(Node* z)
 {
@@ -666,33 +674,35 @@ void RBTree::rbInsert(Node* z)
   {
     y = x;
     if (*z->key < *x->key)
-    {
+    {      
       x=x->left;
-    }
+    }  
     else
-    {
+    {    
       x = x->right;
     }
   }
   z->parent = y;
   if (y == nil)
-  {
+  {  
     root = z;
   }
   else if (*z->key < *y->key) 
-  {
+  {  
     y->left = z;
   }
   else
-  {
+  {  
     y->right = z;
   }
   
   z->left = nil;
   z->right = nil;
   z->color = 'R';
+  
   rbInsertFixup(z);
 }
+
 /**
  * RBTree::rbDelete
  *
@@ -749,3 +759,4 @@ void RBTree::rbDelete(Node* z)
   }
   delete z;
 }
+

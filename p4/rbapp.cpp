@@ -6,22 +6,14 @@
  *          for the RBapp class.
  *
  * @author Athit Vue
- * @date 04/16/2016
+ * @date 10/31/2016
  */
 #include <iostream>
-#include <string>
 #include "rbapp.h"
+#include <string>
 
 using namespace std;
 
-/**
- * RBapp constructor
- */
-RBapp::RBapp()
-{
-  done = false;
-}
- 
  /**
  * int main
  *
@@ -30,30 +22,28 @@ RBapp::RBapp()
  */
 int main()
 {
-  RBapp first_one;
-  first_one.mainLoop();
+  RBapp first_app;  
+  first_app.mainLoop();
   return 0;
-}    
+}
 
 /**
  * RBapp::mainLoop
  * 
  * This contains the main while loop of the program.
  * It keeps calling function processCommand until
- * the command is quit. Boolean variable done is 
- * intialized as false and loop terminates when done
- * becomes true after function processQuit is called. 
+ * it returns false, or it has eof. 
  */
 void RBapp::mainLoop()
 {
-  //While eof is not reached, execute statement. Else
-  //return to main(), even if quit command was not 
-  //recieved. 
-  while(!cin.eof())
+  string command;
+  cin >> command;
+  while (!cin.eof())
   {
-    if (done == false)
+    bool status_return = processCommand(command);
+    if (status_return == true)
     {
-      processCommand();
+      cin >> command;
     }
     else
     {
@@ -68,35 +58,47 @@ void RBapp::mainLoop()
  * 
  * This function calls the approriate private functions based
  * on the inputted command. 
+ * 
+ * @param command The command inputted from the mainLoop.
+ *
+ * @return true Return true if command does not equal "quit".
+ * @return false Return false if command equals "quit".
  */
-void RBapp::processCommand()
-{ 
-  string key, command;
-  
-  cin>>command;
-        
-  if(command == "print")
+bool RBapp::processCommand(string& command)
+{
+  if (command == "insert")
+  {
+    string insert_key;
+    cin >> insert_key;
+    processInsert(insert_key);
+    return true;
+  }
+  else if (command == "find")
+  {
+    string find_key;
+    cin >> find_key;
+    processFind(find_key);
+    return true;
+  }
+  else if (command == "delete")
+  {
+    string delete_key;
+    cin >> delete_key;
+    processDelete(delete_key);
+    return true;
+  }
+  else if (command == "print")
   {
     processPrint();
+    return true;
   }
-  else if(command == "delete")
+  else if (command == "quit")
   {
-    cin>>key;
-    processDelete(key);
+    return false;
   }
-  else if(command == "find")
+  else
   {
-    cin>>key;
-    processFind(key);   
-  }
-  else if(command == "insert")
-  {
-    cin>>key;
-    processInsert(key);
-  }
-  else if(command == "quit")
-  {
-    processQuit();
+    return true; //Return true if invalid command.
   }
 }
 
@@ -129,23 +131,6 @@ void RBapp::processPrint()
 }
 
 /**
- * RBapp::processDelete
- * 
- * This private function calls the delete function from the
- * RBTree class to delete the Node that the user wants to 
- * delete. 
- * 
- * @param key    The key identifier to the node that the user
- *                        wants to delete.
- */
-void RBapp::processDelete(string& key) {
-  string data;
-  cin.ignore();
-  getline(cin,data);
-  myRBT.rbDelete(key, data);
-}
-
-/**
  * RBapp::processFind
  *
  * This private function calls the member function rbFind with 
@@ -157,24 +142,27 @@ void RBapp::processDelete(string& key) {
 void RBapp::processFind(string& key)
 {
   vector<const string*> inputVector = myRBT.rbFind(key);
-
+  
   for (unsigned int i=0; i < inputVector.size(); i++)
   {
     cout << key << " " << *inputVector[i] << endl;
   }
 }
 
-
 /**
- * RBapp::processQuit
- *
- * This private function of the RBapp class basically just 
- * sets the boolean variable done to true for helping in 
- * termination of the while loop in the public function 
- * mainLoop.
+ * RBapp::processDelete
+ * 
+ * This private function calls the delete function from the
+ * RBTree class to delete the Node that the user wants to 
+ * delete. 
+ * 
+ * @param key The key identifier to the node that the user
+ * wants to delete.
  */
-void RBapp::processQuit() 
+void RBapp::processDelete(string& key)
 {
-  done = true;
-  return;
+  string data;
+  cin.ignore();
+  getline(cin,data);
+  myRBT.rbDelete(key, data);
 }

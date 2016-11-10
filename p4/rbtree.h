@@ -1,9 +1,9 @@
 /**
  * @file rbtree.h Declaration of a red-black tree class.
- * 
+ *
  * Note: The functions in this class should not do any I/O (except the
  * provided function rbPrintTree).
- * 
+ *
  * @author Judy Challinger
  * @date 10/23/14
  */
@@ -20,22 +20,22 @@ using std::vector;
 class RBTree {
 
 public:
-   
+
    RBTree();
    ~RBTree();
-   
+
    void rbInsert(const string& key, const string& value);
    void rbDelete(const string& key, const string& value);
    vector<const string*> rbFind(const string& key);
    void rbPrintTree();
-   
+
 private:
-   
+
    // Node is a private nested class - used only by RBTree.
    class Node {
    public:
-      Node();
-      Node(const string&, const string&, Node*);   // Node* s/b a pointer to nil
+      Node(); // use this constructor to create the one nil Node
+      Node(const string& key, const string& value);
       ~Node();
       Node *parent;
       Node *left;
@@ -44,10 +44,10 @@ private:
       string *key;
       string *value;
    };
-   
+
    Node *root;          // pointer to the root of the red-black tree
    Node *nil;           // pointer to the single nil node
-   
+
    // private accessors - must all use nil
    Node* rbTreeMinimum(Node*);
    Node* rbTreeMaximum(Node*);
@@ -55,7 +55,7 @@ private:
    Node* rbTreePredecessor(Node*);
    Node* rbTreeSearch(Node*, const string&);
    void reverseInOrderPrint(Node*, int);
-   
+
    // private mutators
    void leftRotate(Node*);
    void rightRotate(Node*);
