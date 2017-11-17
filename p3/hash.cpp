@@ -5,7 +5,7 @@
           Implements the functions to assist the hash function.
  *
  *  @author Athit Vue
- *  @date 3/25/2016
+ *  @date 10/19/2016
  */
 #include <iostream>
 #include <string>

@@ -1,13 +1,3 @@
-/*
- * @file rbtree.h Declaration of a red-black tree class.
- * 
- * Note: The functions in this class should not do any I/O (except the
- * provided function rbPrintTree).
- * 
- *@author Ace Elberling
- *@date 11/15/2014
- */
-
 #ifndef RBTREE_H
 #define RBTREE_H
 
@@ -28,7 +18,7 @@ public:
    void rbDelete(const string& key, const string& value);
    vector<const string*> rbFind(const string& key);
    void rbPrintTree();
-
+   
 private:
    
    // Node is a private nested class - used only by RBTree.
@@ -55,8 +45,6 @@ private:
    Node* rbTreePredecessor(Node*);
    Node* rbTreeSearch(Node*, const string&);
    void reverseInOrderPrint(Node*, int);
-   
-   Node* getRoot();
    
    // private mutators
    void leftRotate(Node*);

@@ -5,7 +5,7 @@
  *
  *  @brief
  *        Implements a hash function that I found
- *  at : http://www.partow.net/programming/hashfunctions/.
+ *  at: http://www.partow.net/programming/hashfunctions/.
  *  According to the authors of the website, the best results 
  *  have been found to include the use of prime numbers. It states
  *  that when a set of random number is multiply by a prime number
@@ -17,10 +17,10 @@
  *  objective, which is uniform distribution. There were more collisions
  *  than expected but the longest list ever is kept in tact. So to sum it up, 
  *  this hash function did not distribute to some empty slots but it did 
- *  try to keep the linked list short. I stumble upon this with my research
- *  to the best hash function while researching on google.
+ *  try to keep the linked list short. I stumble upon this by researching
+ *  the best hash function on google.
  *  @author (Modified by) Athit Vue
- *  @date 3/25/2016
+ *  @date 10/19/2016
  */
  
 #include <string>

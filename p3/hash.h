@@ -8,7 +8,7 @@
  *        Contains the prototyping of functions for hash.cpp.
  *
  *  @author (Modified by) Athit Vue
- *  @date 3/25/2016
+ *  @date 10/19/2016
  */
 #ifndef __HASH_H
 #define __HASH_H
